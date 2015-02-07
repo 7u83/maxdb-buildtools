@@ -29,7 +29,11 @@ extern boolean	printed;
 extern boolean	verbose;
 extern boolean	show_where_not;
 
-add_include(file, file_red, include, dot)
+
+void pr( register struct inclist  *ip, char*file, char *base);
+
+
+void add_include(file, file_red, include, dot)
 	struct inclist	*file, *file_red;
 	char	*include;
 	boolean	dot;
@@ -66,7 +70,7 @@ add_include(file, file_red, include, dot)
 	}
 }
 
-recursive_pr_include(head, file, base)
+void recursive_pr_include(head, file, base)
 	register struct inclist	*head;
 	register char	*file, *base;
 {
@@ -81,9 +85,7 @@ recursive_pr_include(head, file, base)
 		recursive_pr_include(head->i_list[ i ], file, base);
 }
 
-pr(ip, file, base)
-	register struct inclist  *ip;
-	char	*file, *base;
+void pr( register struct inclist  *ip, char*file, char *base)
 {
 	static char	*lastfile;
 	static int	current_len;

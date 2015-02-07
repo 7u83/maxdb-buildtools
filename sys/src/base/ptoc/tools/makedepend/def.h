@@ -83,8 +83,6 @@ struct filepointer {
 };
 
 char			*copy();
-char			*malloc();
-char			*realloc();
 char			*basename();
 char			*getline();
 struct symtab		*slookup();
@@ -93,3 +91,11 @@ struct symtab		*fdefined();
 struct filepointer	*getfile();
 struct inclist		*newinclude();
 struct inclist		*inc_path();
+
+
+void log_warn(const char * format, ...);
+void log_fatal(const char *format,...);
+void inc_clean ();
+
+//void *x1, void *x2, void *x3, void *x4, void *x5, void *x6, void *x7, void *x8,void  *x9 );
+

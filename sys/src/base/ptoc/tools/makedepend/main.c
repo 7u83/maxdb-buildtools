@@ -9,7 +9,18 @@
 #include <unistd.h>
 #endif
 
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+
+
 #include "def.h"	/* 1992-Jul-13 J.Bruehe  take system includes first */
+
+
+void redirect(char *linep, char *makefile);
+void freefile(struct filepointer *fp);
+
 
 #if u3b || M32 || u3b15 || u3b5 || u3b2 || pyr || sun || ultrix
 #define sigvec sigvector
@@ -103,7 +114,7 @@ struct sigvec sig_vec = {
 	0
 };
 
-main(argc, argv)
+int main(argc, argv)
 	int	argc;
 	char	**argv;
 {
@@ -284,15 +295,14 @@ struct filepointer *getfile(file)
 	return(content);
 }
 
-freefile(fp)
-	struct filepointer	*fp;
+void freefile(struct filepointer *fp)
 {
 	free(fp->f_base);
 	free(fp);
 }
 
 /*VARARGS*/
-log_fatal(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)
+void _old_log_fatal(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)
 char *x0 ;
 void *x1, *x2, *x3, *x4, *x5, *x6, *x7, *x8, *x9 ;
 {
@@ -301,12 +311,34 @@ void *x1, *x2, *x3, *x4, *x5, *x6, *x7, *x8, *x9 ;
 }
 
 /*VARARGS0*/
-log_warn(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)
+void _old_log_warn(x0,x1,x2,x3,x4,x5,x6,x7,x8,x9)
 char * x0 ;	/* J.Bruehe 91-Aug-01  ANSI-C has prototype for "fprintf" */
 void *x1, *x2, *x3, *x4, *x5, *x6, *x7, *x8, *x9 ;
 {
 	fprintf(stderr, x0,x1,x2,x3,x4,x5,x6,x7,x8,x9);
 }
+
+void log_warn(const char *format,...)
+{
+	va_list args;
+	va_start (args, format);
+	vfprintf (stderr,format, args);
+	va_end (args);
+}
+
+void log_fatal(const char *format,...)
+{
+	va_list args;
+	va_start (args, format);
+	vfprintf (stderr,format, args);
+	va_end (args);
+	exit(1);
+}
+
+
+
+
+
 
 char *copy(str)
 	register char	*str;
@@ -317,7 +349,7 @@ char *copy(str)
 	return(p);
 }
 
-match(str, list)
+int match(str, list)
 	register char	*str, **list;
 {
 	register int	i;
@@ -338,7 +370,7 @@ char *getline(filep)
 	register char	*p,	/* walking pointer */
 			*eof,	/* end of file pointer */
 			*bol;	/* beginning of line pointer */
-	register	lineno;	/* line number */
+	register int	lineno;	/* line number */
 
 	p = filep->f_p;
 	eof = filep->f_end;
@@ -395,9 +427,7 @@ char *basename(file)
 	return(file);
 }
 
-redirect(linep, makefile)
-	char    *linep,
-		*makefile;
+void redirect(char *linep, char *makefile)
 {
 	struct stat	st;
 	FILE	*fdin, *fdout;

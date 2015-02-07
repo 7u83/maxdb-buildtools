@@ -1,6 +1,19 @@
 /* @(#)tools/makedepend/include.c
  */
+
+#include <string.h>
+#include <stdlib.h>
+
+
 #include "def.h"
+
+
+void remove_dotdot(char * path);
+int isdot(char	*p);
+int isdotdot(char*p);
+int issymbolic (char *dir, char *component);
+
+
 
 extern struct	inclist	inclist[ MAXFILES ],
 			*inclistp;
@@ -101,7 +114,7 @@ struct inclist *inc_path(file, include, dot)
  * Any of the 'x/..' sequences within the name can be eliminated.
  * (but only if 'x' is not a symbolic link!!)
  */
-remove_dotdot(path)
+void remove_dotdot(path)
 	char	*path;
 {
 	register char	*end, *from, *to, **cp;
@@ -157,24 +170,21 @@ remove_dotdot(path)
 	strcpy(path, newpath);
 }
 
-isdot(p)
-	register char	*p;
+int isdot(char	*p) 
 {
 	if(p && *p++ == '.' && *p++ == '\0')
 		return(TRUE);
 	return(FALSE);
 }
 
-isdotdot(p)
-	register char	*p;
+int isdotdot(char*p)
 {
 	if(p && *p++ == '.' && *p++ == '.' && *p++ == '\0')
 		return(TRUE);
 	return(FALSE);
 }
 
-issymbolic(dir, component)
-	register char	*dir, *component;
+int issymbolic (char *dir, char *component)
 {
 	return (FALSE);
 /*
@@ -219,10 +229,10 @@ struct inclist *newinclude(newfile, incstring)
 	return(ip);
 }
 
-included_by(ip, newfile)
+void included_by(ip, newfile)
 	register struct inclist	*ip, *newfile;
 {
-	register i;
+	register int i;
 
 	if (ip == NULL)
 		return;
@@ -251,7 +261,7 @@ included_by(ip, newfile)
 	ip->i_list[ ip->i_listlen-1 ] = newfile;
 }
 
-inc_clean ()
+void inc_clean ()
 {
 	register struct inclist *ip;
 
