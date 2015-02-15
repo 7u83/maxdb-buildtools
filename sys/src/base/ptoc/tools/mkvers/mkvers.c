@@ -30,6 +30,10 @@ char id_mkvers[] = "@(#)tools/mkvers/mkvers.c		2.0.5  1996-09-03  SQL DBS" ;
 
 #include	<stdio.h>
 #include 	<stdlib.h>
+#include 	<time.h>
+#include 	<string.h>
+
+
 #define SCCS_ID		"@(#)"
 #define SCCS_ID_LEN	4
 #define VERSION		"Version.c"
@@ -68,10 +72,10 @@ int argc; char **argv;
 			perror(*argv);
 			continue;
 		}
-		while(gets(buf)) {
+		while(fgets(buf,BUFSIZ,stdin)) {
 			s = buf;
 			/* In this line, look for a 'what' string, skip it */
-			while (s = index (s, '@')) {
+			while ( (s = index (s, '@')) ) {
 				if (strncmp (s, SCCS_ID, SCCS_ID_LEN) == 0) {
 					s += SCCS_ID_LEN ;
 					while ( *s == ' ' )
@@ -99,8 +103,9 @@ int argc; char **argv;
 	return 0;
 }
 
-char *index(s,c)
-char *s;
+/*
+const char *index(s,c)
+const char *s;
 char c;
 { while (*s) {
 	if (*s==c) return(s);
@@ -108,3 +113,5 @@ char c;
   }
   return((char *)0);
 }
+
+*/
