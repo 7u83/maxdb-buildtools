@@ -69,7 +69,7 @@ ResetHdgArray(){
 }
 #endif /* PYRAMID_DOUBTFUL */
 
-TestOvflw (node_size)
+void TestOvflw (node_size)
 	int	node_size;
 {
 	static	int	HdgLimit = HdgSize;

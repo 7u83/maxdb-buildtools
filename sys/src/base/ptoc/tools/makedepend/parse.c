@@ -19,21 +19,33 @@
     ========== licence end
 
  */
+
+#include <stdlib.h>
+#include <string.h>
+
+#include <sys/signal.h>
+
 #include "def.h"
-#include	<sys/signal.h>
+
+/* Prototypes */
+int deftype(char * linep, struct filepointer * filep, struct inclist * file_red, struct inclist * file, int parse_it);
+void define(char * def, struct inclist *file);
+int zero_value(char *exp, struct filepointer * filep, struct inclist * file_red);
+
+
 
 extern char	*directives[];
 extern struct symtab	deflist[];
 
-find_includes(filep, file, file_red, recursion)
-	struct filepointer	*filep;
+int find_includes( struct filepointer * filep, struct inclist * file, struct inclist * file_red, int recursion)
+	/*struct filepointer	*filep;
 	struct inclist		*file, *file_red;
-	int			recursion;
+	int			recursion;*/
 {
 	register char   *linep;
 	register int	type;
 
-	while (linep = getline(filep)) {
+	while ( (linep = getline(filep)) ) {
 		switch(type = deftype(linep, filep, file_red, file, TRUE)) {
 		case IF:
 			type = find_includes(filep, file,
@@ -101,14 +113,18 @@ find_includes(filep, file, file_red, recursion)
 	return(-1);
 }
 
-gobble(filep, file, file_red)
+
+int gobble(struct filepointer *filep, struct inclist * file, struct inclist * file_red)
+/*
+int gobble(filep, file, file_red)
 	register struct filepointer *filep;
 	struct inclist		*file, *file_red;
+*/
 {
 	register char   *linep;
 	register int	type;
 
-	while (linep = getline(filep)) {
+	while ( (linep = getline(filep)) ) {
 		switch(type = deftype(linep, filep, file_red, file, FALSE)) {
 		case IF:
 		case IFFALSE:
@@ -141,11 +157,12 @@ gobble(filep, file, file_red)
 /*
  * Decide what type of # directive this line is.
  */
-deftype(linep, filep, file_red, file, parse_it)
-	register char   *linep;
+int deftype(char * linep, struct filepointer * filep, struct inclist * file_red, struct inclist * file, int parse_it)
+/*	register char   *linep;
 	register struct filepointer *filep;
 	register struct inclist *file_red, *file;
 	int	parse_it;
+*/
 {
 	register char	*p;
 	char	*directive, savechar;
@@ -244,11 +261,11 @@ struct symtab *defined(symbol, file)
 {
 	register struct symtab	*val;
 
-	if (val = slookup(symbol, deflist)) {
+	if ( (val = slookup(symbol, deflist)) ){
 		debug1("%s defined on command line\n", symbol);
 		return(val);
 	}
-	if (val = fdefined(symbol, file))
+	if ( (val = fdefined(symbol, file)) )
 		return(val);
 	debug1("%s not defined in %s\n", symbol, file->i_file);
 	return(NULL);
@@ -266,11 +283,11 @@ struct symtab *fdefined(symbol, file)
 	if (file->i_defchecked)
 		return(NULL);
 	file->i_defchecked = TRUE;
-	if (val = slookup(symbol, file->i_defs))
+	if ( (val = slookup(symbol, file->i_defs)) )
 		debug1("%s defined in %s\n", symbol, file->i_file);
 	if (val == NULL && file->i_list)
 		for (ip = file->i_list, i=0; i < file->i_listlen; i++, ip++)
-			if (val = fdefined(symbol, *ip)) {
+			if ( (val = fdefined(symbol, *ip)) ){
 				debug1("%s defined in %s\n",
 					symbol, (*ip)->i_file);
 				break;
@@ -295,10 +312,10 @@ struct symtab *slookup(symbol, stab)
 /*
  * Return true if the #if expression evaluates to 0
  */
-zero_value(exp, filep, file_red)
-	register char	*exp;
+int zero_value(char *exp, struct filepointer * filep, struct inclist * file_red)
+	/*register char	*exp;
 	register struct filepointer *filep;
-	register struct inclist *file_red;
+	register struct inclist *file_red;*/
 {
 #ifdef	CPP
 	return (cppsetup(exp, filep, file_red) == 0);
@@ -307,9 +324,10 @@ zero_value(exp, filep, file_red)
 #endif
 }
 
-define(def, file)
-	register char	*def;
+void define(char * def, struct inclist *file)
+/*	register char	*def;
 	register struct inclist	*file;
+*/
 {
 	register char	*p;
 	struct symtab	*sp = file->i_lastdef++;

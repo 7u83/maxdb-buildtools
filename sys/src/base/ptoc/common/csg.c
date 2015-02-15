@@ -189,7 +189,7 @@ InsertList (major, typ, exp1, exp2)
 }
 
 
-LinkLists (L1, L2)
+void LinkLists (L1, L2)
 	int L1, L2;
 {
 	HdgRange NodeIndex, L2head, L2tail;

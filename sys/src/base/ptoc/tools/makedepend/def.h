@@ -44,13 +44,13 @@ extern int	debug;
 #define	debug5	((debug&0x0020)==0) ? debug : log_warn /* unused */
 #define	debug6	((debug&0x0040)==0) ? debug : log_warn /* unused */
 #else
-#define	debug0
-#define	debug1
-#define	debug2
-#define	debug3
-#define	debug4
-#define	debug5
-#define	debug6
+#define	debug0(...)
+#define	debug1(...)
+#define	debug2(...)
+#define	debug3(...)
+#define	debug4(...)
+#define	debug5(...)
+#define	debug6(...)
 #endif
 
 typedef	u_char	boolean;
@@ -96,6 +96,12 @@ struct inclist		*inc_path();
 void log_warn(const char * format, ...);
 void log_fatal(const char *format,...);
 void inc_clean ();
+void included_by(struct inclist *ip, struct inclist * newfile);
+int match(char * str, char ** list);
+void freefile(struct filepointer *fp);
+int find_includes( struct filepointer * filep, struct inclist * file, struct inclist * file_red, int recursion);
 
 //void *x1, void *x2, void *x3, void *x4, void *x5, void *x6, void *x7, void *x8,void  *x9 );
+int gobble(struct filepointer *filep, struct inclist * file, struct inclist * file_red);
+void add_include(struct inclist * file, struct inclist * file_red, char * include, boolean dot);
 

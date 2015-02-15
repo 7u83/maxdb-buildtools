@@ -19,7 +19,6 @@
 
 
 void redirect(char *linep, char *makefile);
-void freefile(struct filepointer *fp);
 
 
 #if u3b || M32 || u3b15 || u3b5 || u3b2 || pyr || sun || ultrix
@@ -349,8 +348,8 @@ char *copy(str)
 	return(p);
 }
 
-int match(str, list)
-	register char	*str, **list;
+int match(char * str, char ** list)
+	/*register char	*str, **list;*/
 {
 	register int	i;
 

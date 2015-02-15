@@ -19,6 +19,9 @@
     ========== licence end
 
  */
+
+#include <string.h>
+
 #include "def.h"
 
 extern struct	inclist	inclist[ MAXFILES ],
@@ -33,10 +36,10 @@ extern boolean	show_where_not;
 void pr( register struct inclist  *ip, char*file, char *base);
 
 
-void add_include(file, file_red, include, dot)
-	struct inclist	*file, *file_red;
+void add_include(struct inclist * file, struct inclist * file_red, char * include, boolean dot)
+	/*struct inclist	*file, *file_red;
 	char	*include;
-	boolean	dot;
+	boolean	dot;*/
 {
 	register struct inclist	*newfile;
 	register struct filepointer	*content;
@@ -118,7 +121,7 @@ void pr( register struct inclist  *ip, char*file, char *base)
 		printf("\n#\t%s", ip->i_list[ i ]->i_incstring);
 }
 
-catch(n)
+void catch(n)
 {
 	fflush(stdout);
 	log_fatal("got signal %d\n", n);

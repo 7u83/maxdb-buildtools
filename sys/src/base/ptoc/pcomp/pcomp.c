@@ -650,6 +650,7 @@ int ParseProgram()
         }
     }
 
+/*
 int main(_argc_, _argv_, _envp_)
 int _argc_;
 int *_argv_;
@@ -669,4 +670,27 @@ int *_envp_;
         sql__exit(0);
         }
     }
+*/
+
+
+int main(int argc, char *argv[])
+{
+
+	// PROBLEM_ERROR !!
+	// envp must be set?
+        {
+	        _argc = argc;
+	        _argv = argv;
+//        _envp = _envp_;
+	        sql__pmain(0);
+        }
+
+        {
+        CommonInitial();
+        PasclInitial();
+        OptimizerInitial();
+        ParseProgram();
+        sql__exit(0);
+        }
+}
 

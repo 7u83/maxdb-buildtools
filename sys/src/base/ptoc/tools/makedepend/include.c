@@ -229,8 +229,8 @@ struct inclist *newinclude(newfile, incstring)
 	return(ip);
 }
 
-void included_by(ip, newfile)
-	register struct inclist	*ip, *newfile;
+void included_by(struct inclist *ip, struct inclist * newfile)
+/*	register struct inclist	*ip, *newfile;*/
 {
 	register int i;
 
